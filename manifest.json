@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "One-Tap CloseRestore By ZT",
+    "description": "Quickly close all windows and tabs, and quickly restore all windows after the next startup. Based on Chrome native API, minimal functionality, no network transmission, 100% local operation.",
+    "permissions": [
+        "tabs",
+        "windows",
+        "storage",
+        "sessions"
+    ],
+    "version": "1.0",
+    "action": {
+        "default_popup": "main.html",
+        "default_icon": "icon/refresh-one.png"
+    }
+}
