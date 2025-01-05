@@ -1,16 +1,6 @@
 // 绑定关闭按钮的点击事件
 document.addEventListener("DOMContentLoaded", function () {
     const closeAllWindowsBtn = document.getElementById("closeAllWindowsBtn");
-    // closeAllTabsBtn.addEventListener("click", function () {
-    // chrome.tabs.query({}, function (tabs) {
-    //     console.log('All open tabs:', tabs);
-    // });
-
-    // chrome.windows.getAll({ populate: false }, function (windows) {
-    //     console.log('Number of windows:', windows.length);
-    // });
-    // });
-
     closeAllWindowsBtn.addEventListener("click", saveWindowsNum);
 });
 
@@ -19,16 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const openHistoryWindowsBtn = document.getElementById("openHistoryWindowsBtn");
     openHistoryWindowsBtn.addEventListener("click", getWindowsNum);
 });
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const setWindowsNumBtn = document.getElementById("setWindowsNum");
-//     setWindowsNumBtn.addEventListener("click", saveWindowsNum);
-// });
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const getWindowsNumBtn = document.getElementById("getWindowsNum");
-//     getWindowsNumBtn.addEventListener("click", getWindowsNum);
-// });
 
 // 获取窗口数量并保存
 function saveWindowsNum() {
