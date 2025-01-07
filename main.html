@@ -1,29 +1,31 @@
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <script src="./js/main.js"></script>
-    </head>
-    <style>
-        #mainWin{
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center;     /* 垂直居中（如果需要） */
-            height: 50px;           /* 如果需要垂直居中，确保容器有高度 */
-            width: 100px;
-        }
-    </style>
-    <body>
-        <div id="mainWin">
-            <!-- <h2>Hello Extensions of the ZT!</h2> -->
-            <button id="closeAllWindowsBtn">关闭</button>
-            <button id="openHistoryWindowsBtn">恢复</button>
 
+<head>
+    <meta charset="utf-8">
+    <script src="./js/main.js"></script>
+</head>
+<style>
+    #mainWin {
+        display: flex;
+        justify-content: center;
+        /* 水平居中 */
+        align-items: center;
+        /* 垂直居中（如果需要） */
+        height: 50px;
+        /* 如果需要垂直居中，确保容器有高度 */
+        width: 180px;
+    }
+    button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+</style>
 
-            <!-- <button id="setWindowsNum">存储值</button>
-            <button id="getWindowsNum">获取值</button> -->
-        </div>
-        
-    </body>
-    
-    
+<body>
+    <div id="mainWin">
+        <button id="closeAllWindowsBtn">关闭</button>
+        <button id="restoreWindowsBtn">恢复</button>
+    </div>
+</body>
+
 </html>
