@@ -13,14 +13,18 @@
         /* 垂直居中（如果需要） */
         height: 50px;
         /* 如果需要垂直居中，确保容器有高度 */
-        width: 100px;
+        width: 180px;
+    }
+    button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
 </style>
 
 <body>
     <div id="mainWin">
         <button id="closeAllWindowsBtn">关闭</button>
-        <button id="openHistoryWindowsBtn">恢复</button>
+        <button id="restoreWindowsBtn">恢复</button>
     </div>
 </body>
 

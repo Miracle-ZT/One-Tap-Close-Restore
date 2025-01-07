@@ -1,18 +1,44 @@
+// 全局按钮
+let closeAllWindowsBtn = null;
+let restoreWindowsBtn = null;
+
+function getElementById(id) {
+    const element = document.getElementById(id);
+    if (!element) {
+        console.error(`Element with ID "${id}" not found.`);
+        return;
+    }
+    return element;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+    closeAllWindowsBtn = getElementById("closeAllWindowsBtn");
+    restoreWindowsBtn = getElementById("restoreWindowsBtn");
+
     // 绑定关闭按钮的点击事件
-    bindButtonClick("closeAllWindowsBtn", saveWindowsNum);
-    // 绑定打开按钮的点击事件
-    bindButtonClick("openHistoryWindowsBtn", getWindowsNum);
+    bindButtonClick(closeAllWindowsBtn, saveWindowsNum);
+    // 绑定恢复按钮的点击事件
+    bindButtonClick(restoreWindowsBtn, getWindowsNum);
+
+    updateCloseBtnState();
+    updateRestoreBtnState();
+
+    // 监听窗口打开事件
+    chrome.windows.onCreated.addListener(updateCloseBtnState);
+
+    // 监听窗口关闭事件
+    chrome.windows.onRemoved.addListener(updateCloseBtnState);
 });
 
 // 按钮绑定点击事件
-function bindButtonClick(buttonId, callback) {
-    const button = document.getElementById(buttonId);
-    if (button) {
-        button.addEventListener("click", callback);
-    } else {
-        console.warn(`Button with ID ${buttonId} not found.`);
+function bindButtonClick(button, callback) {
+    if (!button || typeof callback !== 'function') {
+        console.warn('Invalid button or callback.');
+        return;
     }
+    // 确保不会重复绑定
+    button.removeEventListener('click', callback);
+    button.addEventListener('click', callback);
 }
 
 // 获取窗口数量并保存
@@ -63,8 +89,9 @@ function openHistoryWindows(windowsNum) {
 
     // 递归恢复窗口会逐个恢复，相较循环直接调用异步的用时可能较长，因需等待上一个窗口恢复完成
     function restoreNextSession() {
-        if (restoredCount >= windowsNum) {
+        if (restoredCount >= windowsNum || windowsNum <= 0) {
             console.log('All requested windows restored.');
+            removeWindowsNum();
             return;
         }
 
@@ -77,9 +104,38 @@ function openHistoryWindows(windowsNum) {
                 restoreNextSession(); // 继续恢复下一个会话
             } else {
                 console.log('No recently closed session to restore.');
+                removeWindowsNum();
             }
         });
     }
 
     restoreNextSession();
+}
+
+// 清除缓存的windowsNum
+function removeWindowsNum() {
+    chrome.storage.local.remove('windowsNum', function () {
+        console.log('windowsNum has been removed from storage.');
+        updateRestoreBtnState();
+    });
+}
+
+// 更新关闭按钮的文本
+function updateCloseBtnState() {
+    chrome.windows.getAll({ populate: false }, (windowList) => {
+        closeAllWindowsBtn.textContent = `关闭 (${windowList.length})`;
+    });
+}
+
+// 更新恢复按钮的文本与状态
+function updateRestoreBtnState() {
+    chrome.storage.local.get('windowsNum', function (result) {
+        const savedWindowsNum = result.windowsNum || 0;
+
+        // 当 windowsNum 为 undefined 或 0 时，禁用 "恢复" 按钮
+        restoreWindowsBtn.disabled = savedWindowsNum === 0;
+        restoreWindowsBtn.textContent = `恢复 (${savedWindowsNum})`;
+
+        console.log("restoreWindowsBtn.disabled = ", restoreWindowsBtn.disabled);
+    });
 }
